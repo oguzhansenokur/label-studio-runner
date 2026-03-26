@@ -1,25 +1,50 @@
 @echo off
-echo Checking Python...
+title Label Studio Auto Installer
+
+echo =====================================
+echo Python 3.11 kontrol ediliyor...
+echo =====================================
 
 where python >nul 2>nul
 if %errorlevel% neq 0 (
-    echo Python not found. Installing Python...
+    echo Python bulunamadi. Python 3.11 yukleniyor...
     winget install -e --id Python.Python.3.11
-) else (
-    echo Python already installed.
 )
 
-echo Checking Label Studio...
+echo =====================================
+echo Sanal ortam olusturuluyor...
+echo =====================================
 
-python -m pip show label-studio >nul 2>nul
-if %errorlevel% neq 0 (
-    echo Label Studio not found. Installing Label Studio...
-    python -m pip install label-studio
-) else (
-    echo Label Studio already installed.
-)
+cd %USERPROFILE%
+mkdir labelstudio
+cd labelstudio
 
-echo Starting Label Studio...
+python -m venv venv
+
+call venv\Scripts\activate
+
+echo =====================================
+echo Pip guncelleniyor...
+echo =====================================
+
+python -m pip install --upgrade pip
+
+echo =====================================
+echo Gerekli kutuphaneler kuruluyor...
+echo =====================================
+
+pip install django
+pip install label-studio
+pip install opencv-python
+pip install pillow
+pip install numpy
+pip install pandas
+pip install lxml
+
+echo =====================================
+echo Label Studio baslatiliyor...
+echo =====================================
+
 label-studio
 
 pause
