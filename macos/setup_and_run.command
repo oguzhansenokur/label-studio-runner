@@ -1,29 +1,43 @@
 #!/bin/bash
 
-echo "Checking Python..."
+echo "====================================="
+echo "Python kontrol ediliyor..."
+echo "====================================="
 
 if ! command -v python3 &> /dev/null
 then
-    echo "Python not found. Installing Python..."
-    brew install python
-else
-    echo "Python already installed."
+    echo "Python yukleniyor..."
+    brew install python@3.11
 fi
 
-echo "Checking Label Studio..."
+echo "====================================="
+echo "Kurulum klasoru olusturuluyor..."
+echo "====================================="
 
-if ! python3 -m pip show label-studio &> /dev/null
-then
-    echo "Installing Label Studio..."
-    python3 -m pip install label-studio
-else
-    echo "Label Studio already installed."
-fi
+mkdir -p ~/labelstudio
+cd ~/labelstudio
 
-echo "Starting Label Studio..."
-label-studio &
+echo "====================================="
+echo "Sanal ortam olusturuluyor..."
+echo "====================================="
 
-sleep 5
-open http://localhost:8080
+python3 -m venv venv
+source venv/bin/activate
 
-echo "Done."
+echo "====================================="
+echo "Pip guncelleniyor..."
+echo "====================================="
+
+pip install --upgrade pip
+
+echo "====================================="
+echo "Label Studio kuruluyor..."
+echo "====================================="
+
+pip install label-studio[all]
+
+echo "====================================="
+echo "Label Studio baslatiliyor..."
+echo "====================================="
+
+label-studio start
